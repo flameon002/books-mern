@@ -10,11 +10,12 @@ const app = express();
 app.use(express.json());
 conectDB();
 
-app.use(cors({
-  origin:"http://localhost:3000",
-  methods: ['GET', "PUT", "POST", "DELETE"],
-  allowedHeaders:["Content-type"]
-}));
+app.use(cors())
+// app.use(cors({
+//   origin:"http://localhost:5173",
+//   methods: ['GET', "PUT", "POST", "DELETE"],
+//   allowedHeaders:["Content-type"]
+// }));
 
 app.use("/books",booksRoutes )
 
