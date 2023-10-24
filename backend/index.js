@@ -1,36 +1,24 @@
 import express from "express";
 import { PORT } from "./config.js";
 import { conectDB } from "./db/db.js";
-import Book from "./models/booksModel.js";
+import cors from "cors";
+import booksRoutes from "./routes/booksRoutes.js"
+
+
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 conectDB();
 
-// create book
-app.post("/book", async (req, res) => {
-  try {
-    if (!req.body.title || !req.body.autor || !req.body.publishedYear) {
-      return res.status(400).send({
-        message: "Send all required fields: title, autor, publish year",
-      });
-    }
-    const newBook = new Book({
-      title: req.body.title,
-      autor: req.body.autor,
-      publishedYear: req.body.publishedYear,
-    });
-    const book = await Book.create(newBook);
-  } catch (error) {
-    res.status(500).send({ message: error.mesage });
-    console.log(error);
-  }
-});
+app.use(cors({
+  origin:"http://localhost:3000",
+  methods: ['GET', "PUT", "POST", "DELETE"],
+  allowedHeaders:["Content-type"]
+}));
 
-// test route
-app.get("/", (req, res) => {
-  res.send("helo world");
-});
+app.use("/books",booksRoutes )
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is now running on port ${PORT}`);
